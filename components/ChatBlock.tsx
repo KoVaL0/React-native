@@ -9,11 +9,12 @@ type ChatType = {
   date: string,
   message: string,
   name: string,
+  onClick?: any,
 }
 
 export function ChatBlock(props: TextProps & ChatType) {
     return (
-        <View style={[props.style, styles.block]}>
+        <View onTouchEnd={() => props.onClick()} style={[props.style, styles.block]}>
           <Avatar img={props.img}/>
           <View style={styles.content}>
             <Text style={styles.name}>{props.name}</Text>

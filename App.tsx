@@ -1,5 +1,5 @@
 import {StatusBar} from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import useCachedResources from './hooks/useCachedResources';
@@ -11,7 +11,8 @@ import thunk from "redux-thunk";
 import rootReducer from "./redux/index";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {MenuModal} from "./components/MenuModal";
-import {setModal} from "./redux/data/actions";
+import {setModal, setUser} from "./redux/data/actions";
+import {getUser} from "./api/users";
 
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
@@ -23,6 +24,11 @@ export default function App() {
     store.subscribe(()=>{
         setMenu(store.getState().data.modal)
     })
+    useEffect(() => {
+        store.dispatch(setUser(getUser(0)))
+    }, [])
+
+
     const handlerModalClick = () => {
         store.dispatch(setModal(!menu))
     }

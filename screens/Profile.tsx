@@ -5,15 +5,19 @@ import { Feather } from '@expo/vector-icons';
 import { Text, View } from '../components/Themed';
 import {Avatar} from "../components/Avatar";
 import {VideoBlock} from "../components/VideoBlock";
+import {store} from "../App";
+import {useEffect, useState} from "react";
 
 export default function Profile() {
+  const [user, setUser] = useState(store.getState().data.user)
+
   return (
     <View style={styles.container}>
       <View style={styles.profileBlock}>
         <Avatar img={"https://xakep.ru/wp-content/uploads/2013/12/085647.jpg"} style={{width: 100, height: 100, marginRight: 20,}}/>
         <View>
-          <Text style={styles.title}>Александр</Text>
-          <Text style={styles.title}>Ковалёв</Text>
+          <Text style={styles.title}>{user.first_name}</Text>
+          <Text style={styles.title}>{user.last_name}</Text>
         </View>
         <Feather style={styles.settings} name="settings" size={24} color="black" />
       </View>
