@@ -27,7 +27,8 @@ export function InputMessage(props: TextProps & ChatType) {
                 onPress={() => {props.onPressSubmit()}}
                 color={"#6e748b"}
                 style={styles.button}
-                title={"-->"} />
+                title={"-->"}
+            />
         </View>
     )
 }

@@ -11,6 +11,7 @@ export function MenuModal(props: any) {
     return (
             <Modal
                 animationType="fade"
+                visible={props.visible}
                 transparent={true}
                 onRequestClose={() => {
                     props.handlerModalClick();

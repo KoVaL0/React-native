@@ -7,36 +7,62 @@ import {SelfMessage} from "../components/SelfMessage";
 import {getDialog} from "../api/dialog";
 import {store} from "../App";
 import {InputMessage} from "../components/InputMessage";
+import {createMessage, getMessage} from "../api/message";
+import {LoadMessage} from "../components/LoadMessage";
 
 export default function Dialogs(props: any) {
-    const [dialog, setDialog] = useState(getDialog(store.getState().data.dialogId || 0))
+    const [dialog, setDialog] = useState()
     const [user] = useState(store.getState().data.user)
-    const [text, onChangeText] = React.useState("");
+    const [text, onChangeText] = useState("");
+    const hostUrl = process.env.REACT_APP_API_URL
 
-    const onPressSubmit = () => {
-        setDialog((prev: any) => {
-            const message = {
-                "date": Date.now(),
-                "id": prev.message.length,
-                "read_state": 0,
-                "text": text,
-                "uid": user.uid
-            }
-            return {...
-                prev, message: prev.message.concat(message)
-            }
-        })
-        onChangeText("")
+    const getMessage = async () => {
+        await fetch(`http://192.168.43.145:7000/api/message`)
+            .then(res => res.json())
+            .then(json => setDialog(json))
+            .catch(e => console.log(e))
     }
+
+    const createMessage = () => {
+        const message = {
+            id: dialog.length + 1 ,
+            uid: user.id,
+            content: text,
+            read_state: 0
+        }
+        setDialog(prev => prev.concat(message))
+        fetch(`http://192.168.43.145:7000/api/message`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({...message, date: Date.now()})
+        })
+            .then(() => {})
+            .catch(e => console.log(e))
+    }
+
+    const onPressSubmit = async () => {
+        if (text.trim()) {
+            await createMessage()
+            getMessage()
+            onChangeText("")
+        }
+    }
+
+    useEffect(() => {
+        getMessage()
+    }, [])
 
     const renderItem = ({item}: any) => {
         return (
-            (user.uid === item.uid) ?
+            (user.id === item.uid) ?
                 <View style={styles.selfContainer}>
                     <SelfMessage
                         style={styles.chat}
                         date={item.date}
-                        message={item.text}
+                        message={item.content}
                     />
                 </View>
                 :
@@ -44,7 +70,7 @@ export default function Dialogs(props: any) {
                     <SelfMessage
                         style={styles.friendChat}
                         date={item.date}
-                        message={item.text}
+                        message={item.content}
                     />
                 </View>
         )
@@ -54,7 +80,7 @@ export default function Dialogs(props: any) {
         <React.Fragment>
             <View style={styles.container}>
                 <FlatList
-                    data={dialog.message}
+                    data={dialog}
                     style={styles.flatList}
                     keyExtractor={(item => item.id.toString())}
                     renderItem={renderItem}

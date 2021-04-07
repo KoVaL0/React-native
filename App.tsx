@@ -1,6 +1,7 @@
 import {StatusBar} from 'expo-status-bar';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -12,22 +13,19 @@ import rootReducer from "./redux/index";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {MenuModal} from "./components/MenuModal";
 import {setModal, setUser} from "./redux/data/actions";
-import {getUser} from "./api/users";
+import {check, getUser} from "./api/users";
+import Registration from "./screens/Registration";
 
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
-
     const [menu,setMenu] = useState(store.getState().data.modal)
+
     store.subscribe(()=>{
         setMenu(store.getState().data.modal)
     })
-    useEffect(() => {
-        store.dispatch(setUser(getUser(0)))
-    }, [])
-
 
     const handlerModalClick = () => {
         store.dispatch(setModal(!menu))
@@ -39,7 +37,7 @@ export default function App() {
         return (
             <Provider store={store}>
                 <SafeAreaProvider>
-                    {menu ? <MenuModal handlerModalClick={handlerModalClick}/> : null}
+                    <MenuModal visible={menu} handlerModalClick={handlerModalClick}/>
                     <Navigation colorScheme={colorScheme}/>
                     <StatusBar/>
                 </SafeAreaProvider>

@@ -5,25 +5,15 @@ import {Text, TextProps} from './Themed';
 import {getDialog} from "../api/dialog";
 
 type ChatType = {
-    date?: number,
     message: string,
 }
 
-const dateTransform = (date: number) => {
-    const hours: number = new Date(+date).getHours()
-    let minutes: number | string = new Date(+date).getUTCMinutes()
-    if (minutes <= 9) {
-        minutes = '0' + minutes
-    }
-    return `${hours}:${minutes}`
-}
-
-export function SelfMessage(props: TextProps & ChatType) {
+export function LoadMessage(props: TextProps & ChatType) {
 
     return (
         <View style={[styles.block, props.style]}>
             <Text style={styles.message}>{props.message}</Text>
-            <Text style={styles.date}>{props.date ? dateTransform(props.date) : "--:--"}</Text>
+            <Text style={styles.date}>--:--</Text>
         </View>
     )
 }

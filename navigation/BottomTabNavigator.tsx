@@ -17,6 +17,7 @@ import {MenuModal} from "../components/MenuModal";
 import {store} from "../App";
 import {setModal} from "../redux/data/actions";
 import Dialogs from "../screens/Dialogs";
+import {findUser} from "../api/users";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -74,7 +75,18 @@ function TabOneNavigator({navigation}: any) {
                         />
                     ),
                     headerRight: () => (
-                        <Fontisto name="zoom" size={24} color="black" style={{paddingRight: 10}}/>
+                        <>
+                            <Fontisto name="zoom" size={24} color="black" style={{paddingRight: 10}}/>
+                            <Fontisto
+                                name="zoom"
+                                size={24}
+                                color="black"
+                                style={{paddingRight: 10}}
+                                onPress={() => {
+                                    findUser("+375336785179")
+                                }}
+                            />
+                        </>
                     ),
                 }}
             />
@@ -94,7 +106,14 @@ function TabOneNavigator({navigation}: any) {
                         />
                     ),
                     headerRight: () => (
-                        <Fontisto name="zoom" size={24} color="black" style={{paddingRight: 10}}/>
+                        <>
+                            <Fontisto
+                                name="zoom"
+                                size={24}
+                                color="black"
+                                style={{paddingRight: 10}}
+                            />
+                        </>
                     ),
                 }}/>
         </TabOneStack.Navigator>
