@@ -13,20 +13,6 @@ export default function useCachedResources() {
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
 
-    const getUser = async () => {
-      try {
-        const result = await AsyncStorage.getItem('@User')
-        if(result !== null) {
-          const res = await check(result);
-          console.log(await res)
-          await store.dispatch(setUser(res));
-          setLoadingComplete(true);
-        }
-      } catch(e) {
-        console.log(e)
-      }
-    }
-
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHideAsync();
@@ -41,10 +27,10 @@ export default function useCachedResources() {
         console.warn(e);
       } finally {
         SplashScreen.hideAsync();
+        setLoadingComplete(true);
       }
     }
 
-    getUser()
     loadResourcesAndDataAsync();
   }, []);
 

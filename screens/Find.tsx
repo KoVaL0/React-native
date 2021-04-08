@@ -7,36 +7,27 @@ import {store} from "../App";
 import {useState} from "react";
 import {MenuModal} from "../components/MenuModal";
 import {setDialogId, setModal} from "../redux/data/actions";
+import {InputFind} from "../components/InputFind";
 
-export default function Main(props: any) {
-    const [state,setState] = useState(store.getState())
-    store.subscribe(()=>{
-        setState(store.getState())
-    })
-    const handlerDialogsClick = (id: number) => {
-        props.navigation.push('Dialogs')
-        store.dispatch(setDialogId(id))
-    }
+export default function Find(props: any) {
+    const [friend, setFriend] = useState()
 
     return (
         <View style={styles.container}>
-            <ChatBlock
-                style={styles.chat}
-                img={"https://xakep.ru/wp-content/uploads/2013/12/085647.jpg"}
-                name={"Дмитрий"}
-                date={"23:42"}
-                message={"Привет! Как ты там?"}
-                onClick={() => handlerDialogsClick(0)}
-            />
-            <ChatBlock
-                style={styles.chat}
-                img={"https://vraki.net/sites/default/files/inline/images/30_55.jpg"}
-                name={"Александр"}
-                date={"13:23"}
-                message={"Саня, верни сотку!"}
-                onClick={() => handlerDialogsClick(1)}
-            />
-            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
+            <InputFind setFriend={(res) => setFriend(res)}/>
+            <Text style={{marginVertical: 10, ...styles.title}}>Find user</Text>
+            {friend ? (
+                <View style={styles.friend}>
+                    <View>
+                        <Text>{friend.first_name}</Text>
+                        <Text>{friend.last_name}</Text>
+                    </View>
+                    <Button title={"+"} onPress={() => {
+                    }}/>
+                </View>
+            ) : (
+                <Text>нет пользователей</Text>
+            )}
         </View>
     );
 }
@@ -46,6 +37,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         padding: 20,
+    },
+    friend: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-around",
     },
     title: {
         fontSize: 20,

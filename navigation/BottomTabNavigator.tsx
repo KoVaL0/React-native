@@ -18,6 +18,9 @@ import {store} from "../App";
 import {setModal} from "../redux/data/actions";
 import Dialogs from "../screens/Dialogs";
 import {findUser} from "../api/users";
+import Find from "../screens/Find";
+import {InputMessage} from "../components/InputMessage";
+import {InputFind} from "../components/InputFind";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -57,6 +60,7 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>['name'
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator({navigation}: any) {
+
     // @ts-ignore
     return (
         <TabOneStack.Navigator>
@@ -76,14 +80,13 @@ function TabOneNavigator({navigation}: any) {
                     ),
                     headerRight: () => (
                         <>
-                            <Fontisto name="zoom" size={24} color="black" style={{paddingRight: 10}}/>
                             <Fontisto
                                 name="zoom"
                                 size={24}
                                 color="black"
                                 style={{paddingRight: 10}}
                                 onPress={() => {
-                                    findUser("+375336785179")
+                                    navigation.navigate("Find")
                                 }}
                             />
                         </>
@@ -104,6 +107,34 @@ function TabOneNavigator({navigation}: any) {
                             color="black"
                             onPress={() => navigation.navigate("TabOneScreen")}
                         />
+                    ),
+                    headerRight: () => (
+                        <>
+                            <Fontisto
+                                name="zoom"
+                                size={24}
+                                color="black"
+                                style={{paddingRight: 10}}
+                            />
+                        </>
+                    ),
+                }}/>
+            <TabOneStack.Screen
+                // @ts-ignore
+                name="Find"
+                component={Find}
+                options={{
+                    headerTitle: 'Поиск',
+                    headerLeft: () => (
+                        <>
+                            <AntDesign
+                                style={{paddingLeft: 10}}
+                                name="arrowleft"
+                                size={24}
+                                color="black"
+                                onPress={() => navigation.navigate("TabOneScreen")}
+                            />
+                        </>
                     ),
                     headerRight: () => (
                         <>

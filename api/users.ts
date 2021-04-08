@@ -53,5 +53,5 @@ export const findUser = async (phone: string) => {
         },
         body: JSON.stringify({phone})
     })
-    console.log(await data)
+    return data.json()
 }
